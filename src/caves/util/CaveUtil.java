@@ -33,7 +33,7 @@ public class CaveUtil {
 			for(byte o2 = 1; o2 < 5; o2++)
 				//loop throught the Second origin's top row or bottom row keeping track of where we are in ours.
 				for(byte t2 = 0; t2 < 4; t2++) {//+9
-					dir.add(fromCoords((byte)(o + ROW_2), (byte)(o2+ROW_2), t, (byte)(t2 + (o == 0 ? 0 : 9))));
+					dir.add(fromCoords((byte)(o + ROW_2), (byte)(o2+ROW_2), t, (byte)(t2 + (o == 0 ? 0 : 8))));
 					t++;
 				}
 		}
@@ -41,16 +41,16 @@ public class CaveUtil {
 			dir.add(fromCoords(o, (byte)0));
 			for(byte t = 0; t < 8; t++)
 				dir.add(fromCoords((byte)(o + ROW_1), t));
-			byte t = 5;
+			byte t = 4;
 			//if we're the priority secondary origins
 			if(o == 1 || o == 3) {
 				byte o2 = 2;
 				//loop through their thetas if we are at the already done primary 5 origin
 				//skip over
-				for(byte t2 = 15; t2 > 4; t2 -=(t2 <= 13 && t2 > 7) ? 6 : 1) {
+				for(byte t2 = 15; t2 >= 4; t2 -=(t2 <= 12 && t2 > 7) ? 5 : 1) {
 					dir.add(fromCoords((byte)(o+ROW_2), (byte)(o2+ROW_2), t, t2));
 					if(t == 7) {
-						t+=6;
+						t+=5;
 						o2++;
 					}
 					else
