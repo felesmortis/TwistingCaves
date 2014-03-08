@@ -51,7 +51,8 @@ public class Main extends JFrame implements Runnable {
 	}
 	public static void main(String[] args) {
 		CaveUtil.initDirections();
-		Main main = new Main();
+		CaveUtil.testCoords();
+		//Main main = new Main();
 
 	}
 	public void createframe() {
@@ -78,7 +79,7 @@ public class Main extends JFrame implements Runnable {
 		drawUniv(top, bimgTop);
 		top2D.setColor(Color.black);
 		if(itemSelected) {
-			System.out.println("sup");
+			//System.out.println("sup");
 			for(int i = 0; i < exitdisplay.size(); i++) {
 				int dir = Exit.exits.get(exitdisplay.get(i)).dir;
 				byte or = CaveUtil.get(dir, 0), 
