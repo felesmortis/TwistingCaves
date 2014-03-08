@@ -8,11 +8,11 @@ import caves.util.CaveUtil;
 
 public class Exit extends Location {
 	//public static HashMap(Integer, )
-	public static ArrayList<Exit> exits;
+	public static ArrayList<Exit> exits = new ArrayList<Exit>();
 	public static HashMap<Integer, Integer> linked;
 	public static Exit deadEnd = new Exit((short) -1, null);
-	short dir;
-	Node node;
+	public int dir;
+	public Node node;
 	static Random r = new Random(new Date().getTime());
 	public Exit() {
 		this(Node.randomNode());
@@ -20,7 +20,7 @@ public class Exit extends Location {
 	public Exit(Node dest) {
 		this(allowableDir(dest), dest);
 	} 
-	public Exit(short dir, Node dest){
+	public Exit(int dir, Node dest){
 		super();
 		this.dir = dir;
 		this.node = dest;
@@ -29,10 +29,10 @@ public class Exit extends Location {
 		exits.add(e);
 		return exits.indexOf(e);
 	}
-	public static short allowableDir(Node dest) {
-		short ranDir;
+	public static int allowableDir(Node dest) {
+		int ranDir;
 		do {
-			ranDir = (short)r.nextInt(CaveUtil.dirCount() - 1);
+			ranDir = r.nextInt(CaveUtil.dirCount() - 1);
 		} while(dest.contains(ranDir) && !CaveUtil.getDirections().contains(ranDir));
 		return ranDir;
 	}
