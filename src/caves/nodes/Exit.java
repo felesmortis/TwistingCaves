@@ -4,26 +4,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
-
-import com.google.common.collect.HashBiMap;
-
 import caves.util.CaveUtil;
 
 public class Exit extends Location {
 	//public static HashMap(Integer, )
 	public static ArrayList<Exit> exits;
 	public static HashMap<Integer, Integer> linked;
-	public static Exit deadEnd = new Exit(-1, null);
-	int dir;
+	public static Exit deadEnd = new Exit((short) -1, null);
+	short dir;
 	Node node;
 	static Random r = new Random(new Date().getTime());
 	public Exit() {
 		this(Node.randomNode());
 	}
 	public Exit(Node dest) {
-		this(allowableInt(dest), dest);
+		this(allowableDir(dest), dest);
 	} 
-	public Exit(int dir, Node dest){
+	public Exit(short dir, Node dest){
 		super();
 		this.dir = dir;
 		this.node = dest;
@@ -32,11 +29,11 @@ public class Exit extends Location {
 		exits.add(e);
 		return exits.indexOf(e);
 	}
-	public static int allowableInt(Node dest) {
-		int ranDir;
+	public static short allowableDir(Node dest) {
+		short ranDir;
 		do {
-			ranDir = r.nextInt(CaveUtil.dirCount() - 1);
-		} while(dest.contains(ranDir));
+			ranDir = (short)r.nextInt(CaveUtil.dirCount() - 1);
+		} while(dest.contains(ranDir) && !CaveUtil.getDirections().contains(ranDir));
 		return ranDir;
 	}
 	public static Exit add(Exit e) {

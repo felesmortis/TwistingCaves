@@ -1,31 +1,25 @@
 package caves.util;
 
-import caves.nodes.Exit;
-
-import com.google.common.collect.HashBiMap;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 public class CaveUtil {
-	private static HashBiMap<Integer, String> dir = HashBiMap.create();
-	private static int nextID = 0;
-	public static int getDirection(String cardinal) {
-		return dir.inverse().get(cardinal);
-	}
-	public static String getDirection(int ID) {
-		return dir.get(ID);
-	}
+	private static ArrayList<Short> dir = new ArrayList<Short>();
+	//private static int nextID = 0;
+	
+//	public static String getDirection(int ID) {
+//		return dir.get(ID);
+//	}
 	public static void initDirections() {
-		adir("N");
-		adir("S");
-		adir("E");
-		adir("W");
-		adir("U");
-		adir("D");
-		for(int i = 0; i < 4; i++) {
-			//TODO: POPULATE LATER
-		}
-	}
-	public static void adir(String direction) {
-		dir.put(nextID++, direction);
+		for(byte y = 0; y < 9; y++)
+			for(byte x = 0; y < 16; y++) {
+				ByteBuffer bb = ByteBuffer.allocate(2);
+				bb.order(ByteOrder.LITTLE_ENDIAN);
+				bb.put(y);
+				bb.put(x);
+				dir.add(bb.getShort(0));
+			}
 	}
 	public static boolean intArrContains(int[] arr, int num){
 		for(int i : arr)
@@ -33,7 +27,10 @@ public class CaveUtil {
 				return true;
 		return false;
 	}
+	public static ArrayList<Short> getDirections() {
+		return dir;
+	}
 	public static int dirCount(){
-		return nextID;
+		return dir.size();
 	}
 }

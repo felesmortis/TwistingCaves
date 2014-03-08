@@ -18,12 +18,12 @@ public class Node extends Location {
 	public Node(int numpaths) {
 		this(numpaths, genRanDirs(numpaths));
 	}
-	public Node(int numpaths, int[] dirs) {
+	public Node(int numpaths, short[] dirs) {
 		super();
 		addExits(numpaths, dirs);
 		nodes.add(this);
 	}
-	public void addExits(int numpaths, int[] dirs) {
+	public void addExits(int numpaths, short[] dirs) {
 		if(dirs != null && numpaths >= dirs.length) {
 			for(int i = 0; i < numpaths; i++) {
 				Exit exit = i < dirs.length ? new Exit(dirs[i], this) : new Exit();
@@ -31,7 +31,7 @@ public class Node extends Location {
 			}
 		}
 	}
-	public void setExit(int dir, Node dest) {
+	public void setExit(short dir, Node dest) {
 		setExit(new Exit(dir, dest));
 	}
 	public void setExit(Exit exit) {
@@ -40,26 +40,19 @@ public class Node extends Location {
 	public ArrayList<Integer> getExits() {
 		return exits;
 	}
-	public static int[] genRanDirs(int num) {
-		int[] dirs = new int[num];
-		for(int i = 0; i < num; i++) {
-			int next;
+	public static short[] genRanDirs(int num) {
+		short[] dirs = new short[num];
+		for(int i = 0; i < num; i++) {			
+			short ranDir;
 			do {
-				next = r.nextInt(CaveUtil.dirCount()-1);
-			} while(CaveUtil.intArrContains(dirs, num));
-			dirs[i] = next;
+				ranDir = (short)r.nextInt(CaveUtil.dirCount() - 1);
+			} while(!CaveUtil.getDirections().contains(ranDir));
+			dirs[i] = ranDir;
 		}
 		return dirs;
 	}
 	public static Node randomNode() {
 		return nodes.get(r.nextInt(nodes.size()-1));
-	}
-	public static Exit[] genDefNodes() {
-		Exit[] dest = new Exit[4];
-		for(int i = 0; i < dest.length; i++) {
-			dest[i] = new Exit(i, randomNode());
-		}
-		return dest;
 	}
 	public boolean contains(Node node) {
 		for(int e : exits){
