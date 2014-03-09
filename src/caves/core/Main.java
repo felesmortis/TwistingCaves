@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Main extends JFrame implements Runnable {
 	Thread t;
 	ArrayList<Integer> exitdisplay;
+	ArrayList<Short> exitTop, exitBot, exitNorth, exitSouth, exitEast, exitWest;
 	boolean itemSelected = false;
 	Graphics top, bot, north, south, east, west, map;
 	BufferedImage bimgTop, bimgBot, bimgNorth, bimgSouth, bimgEast, bimgWest, bimgMap;
@@ -42,17 +43,50 @@ public class Main extends JFrame implements Runnable {
 		getTestNode();
 	}
 	public void getTestNode() {
-		Node testnode = new Node();
+		Node testnode = new Node(111);
 		setSelectedNode(testnode);
 	}
 	public void setSelectedNode(Node node) {
-		exitdisplay = node.getExits();
+		exitdisplay = new ArrayList<Integer>();
+		for(int i : node.getExits()) {
+			exitdisplay.add(Exit.exits.get(i).dir);
+		}
+		exitTop = new ArrayList<Short>();
+		populate(0, exitTop);
+		exitNorth = new ArrayList<Short>();
+		populate(1, exitNorth);
+		exitEast = new ArrayList<Short>();
+		populate(2, exitEast);
+		exitSouth = new ArrayList<Short>();
+		populate(3, exitSouth);
+		exitWest = new ArrayList<Short>();
+		populate(4, exitWest);
+		exitBot = new ArrayList<Short>();
+		populate(5, exitBot);
 		itemSelected = true;
+	}
+	private void populate(int dir, ArrayList<Short> arr) {
+		for(int i : exitdisplay) {
+			if(Math.floor((CaveUtil.getFull(i, CaveUtil.PLACE_OR) % 10)) == dir) {
+				//System.out.println(CaveUtil.getFull(i, CaveUtil.PLACE_OR) + " " + CaveUtil.getFull(i, CaveUtil.PLACE_THETA));
+				byte or = CaveUtil.getFull(i, CaveUtil.PLACE_OR), t = CaveUtil.getFull(i, CaveUtil.PLACE_THETA);
+				arr.add(CaveUtil.fromCoordPair(or, t));
+//				System.out.println(or + " " + t);
+//				System.out.println("asdf:" +i);
+				//System.out.println(arr.get(arr.size()-1));
+			} else if(Math.floor((CaveUtil.getFull(i, CaveUtil.PLACE_OR2) % 10)) == dir) {
+				byte or = CaveUtil.getFull(i, CaveUtil.PLACE_OR2), t = CaveUtil.getFull(i, CaveUtil.PLACE_THETA2);
+				arr.add(CaveUtil.fromCoordPair(or, t));
+				//System.out.println(arr.get(arr.size()-1));
+//				System.out.println(or + " " + t);
+//				System.out.println("asdf:" +i);
+			}
+		}
 	}
 	public static void main(String[] args) {
 		CaveUtil.initDirections();
-		CaveUtil.testCoords();
-		//Main main = new Main();
+		//CaveUtil.testCoords();
+		Main main = new Main();
 
 	}
 	public void createframe() {
@@ -67,62 +101,88 @@ public class Main extends JFrame implements Runnable {
 			repaint();
 		}
 	}
-	private void drawUniv(Graphics g, BufferedImage bimg) {
+	private void drawUniv(Graphics g, BufferedImage bimg, ArrayList<Short> exits) {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(1, 1, bimg.getWidth()-1, bimg.getHeight()-1);
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(0, 0, bimg.getWidth(), bimg.getHeight());
-	}
-	private void drawTop() {
-		Graphics2D top2D = (Graphics2D)top;
-		drawUniv(top, bimgTop);
-		top2D.setColor(Color.black);
-		if(itemSelected) {
-			//System.out.println("sup");
-			for(int i = 0; i < exitdisplay.size(); i++) {
-				int dir = Exit.exits.get(exitdisplay.get(i)).dir;
-				byte or = CaveUtil.get(dir, 0), 
-						or2 = CaveUtil.get(dir, 1), 
-						theta = CaveUtil.get(dir, 2), 
-						theta2 = CaveUtil.get(dir, 3);
+		//g2d.fillArc(0 + (bimg.getWidth()/2), 0 + (bimg.getHeight()/2), 50, 50, 0, 360);
+		if(exits == null || exits.size() == 0) {
+			g2d.drawString("Nothing to Report", (bimg.getWidth()/2), (bimg.getHeight()/2));
+		} else if(bimg != bimgMap && itemSelected) {
+			for(int i = 0; i < exits.size(); i++) {
+				short dir = exits.get(i);
+				byte or = CaveUtil.getPair(dir, CaveUtil.PAIR_OR), t = CaveUtil.getPair(dir, CaveUtil.PAIR_THETA);
+				byte r = (byte)(or * .10);
+				byte o = (byte)(or % 10);
+				//System.out.println(or % 10);
 				int cx, cy;
-				//cx = (int) (13 * y * Math.cos((360/16) * x));
-				//cy = (int) (13 * y * Math.sin((360/16) * x));
+				int d = 5;
+				int anginc = 1;
+				switch(r) {
+				case 1:
+					anginc = 8;
+					break;
+				case 2:
+					anginc = 10;
+					break;
+				}
+				if(o == 0 || o  == 5) {
+					anginc *= 2;
+				}
+				float theta = (360 / anginc) * t;//(360/((o == 0 || o == 5 || r == 2) ? 16 : 8)) * t;
+				if(anginc == 16)
+					System.out.println(anginc + " " + theta + " " + t);
+				cx = (int) ((50 * r) * Math.cos(theta));
+				cy = (int) ((50 * r) * Math.sin(theta));
+				//System.out.println("cx: " + cx + " cy: " + cy + "\n\t o: " + or);
+				g2d.setColor(Color.red);
+				//g2d.fillOval(cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)), d, d);
+				g2d.drawString(/*"" + or + */"" + t,cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)));//, d, d);
 				//top2D.fillRect(1, 1, bimgTop.getWidth(), bimgTop.getHeight());
-				top2D.setColor(Color.red);
-				//top2D.fillArc(cx + (bimgTop.getWidth()/2), cy + (bimgTop.getHeight()), 1, 1, 0, 360);
+				//g2d.fillArc(0 + (bimgTop.getWidth()/2), 0 + (bimgTop.getHeight()/2), 50, 50, 0, 360);
 				//System.out.println(cx);
 				//System.out.println(cy);
 			}
 		}
+
+	}
+	private void drawTop() {
+		drawUniv(top, bimgTop, exitTop);
+		Graphics2D top2D = (Graphics2D)top;
+		top2D.setColor(Color.black);
+
+		//top.setColor(Color.red);
+		//top.fillArc(0 + (bimgTop.getWidth()/2), 0 + (bimgTop.getHeight()/2), 50, 50, 0, 360);
 	}
 	private void drawBot() {
 		Graphics2D bot2D = (Graphics2D)bot;
-		drawUniv(bot, bimgBot);
+		drawUniv(bot, bimgBot, exitBot);
 	}
 	private void drawNorth() {
 		Graphics2D north2D = (Graphics2D)north;
-		drawUniv(north, bimgNorth);
+		drawUniv(north, bimgNorth, exitNorth);
 	}
 	private void drawSouth() {
 		Graphics2D south2D = (Graphics2D)south;
-		drawUniv(south, bimgSouth);
+		drawUniv(south, bimgSouth, exitSouth);
 	}
 	private void drawEast() {
 		Graphics2D east2D = (Graphics2D)east;
-		drawUniv(east, bimgEast);
+		drawUniv(east, bimgEast, exitEast);
 	}
 	private void drawWest() {
 		Graphics2D west2D = (Graphics2D)west;
-		drawUniv(west, bimgWest);
+		drawUniv(west, bimgWest, exitWest);
 	}
 	private void drawMap() {
 		Graphics2D map2D = (Graphics2D)map;
-		drawUniv(map, bimgMap);
+		drawUniv(map, bimgMap, null);
 	}
 	@Override
 	public void paint(Graphics g) {
+		super.paint(g);
 		Graphics2D g2d = (Graphics2D)g;
 		drawTop();
 		drawBot();

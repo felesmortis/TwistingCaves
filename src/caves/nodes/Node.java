@@ -31,9 +31,6 @@ public class Node extends Location {
 			}
 		}
 	}
-	public void setExit(int dir, Node dest) {
-		setExit(new Exit(dir, dest));
-	}
 	public void setExit(Exit exit) {
 		exits.add(Exit.addExit(exit));
 	}
@@ -42,12 +39,20 @@ public class Node extends Location {
 	}
 	public static int[] genRanDirs(int num) {
 		int[] dirs = new int[num];
-		for(int i = 0; i < num; i++) {			
-			int ranDir;
+		for(int i = 0; i < num; i++) {
+			boolean dupe = false;
 			do {
-				ranDir = r.nextInt(CaveUtil.dirCount() - 1);
-			} while(!CaveUtil.getDirections().contains(ranDir));
-			dirs[i] = ranDir;
+				dupe = false;
+				int ranDir;
+				ranDir = r.nextInt(CaveUtil.getDirections().size());
+				for(int in : dirs){
+					if(ranDir == in){
+						dupe = true;
+						break;
+					}
+				}
+				dirs[i] = CaveUtil.getDirections().get(ranDir);
+			} while(dupe);
 		}
 		return dirs;
 	}
