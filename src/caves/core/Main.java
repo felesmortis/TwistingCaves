@@ -43,7 +43,7 @@ public class Main extends JFrame implements Runnable {
 		getTestNode();
 	}
 	public void getTestNode() {
-		Node testnode = new Node(111);
+		Node testnode = new Node(10);
 		setSelectedNode(testnode);
 	}
 	public void setSelectedNode(Node node) {
@@ -91,7 +91,7 @@ public class Main extends JFrame implements Runnable {
 	}
 	public void createframe() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setSize(1000, 750);
+		setSize(1000, 780);
 		this.setResizable(false);
 		setVisible(true);
 	}
@@ -118,28 +118,32 @@ public class Main extends JFrame implements Runnable {
 				byte o = (byte)(or % 10);
 				//System.out.println(or % 10);
 				int cx, cy;
-				int d = 5;
+				int d = 8;
 				int anginc = 1;
 				switch(r) {
 				case 1:
 					anginc = 8;
 					break;
 				case 2:
-					anginc = 10;
+					anginc = 16;
 					break;
 				}
 				if(o == 0 || o  == 5) {
-					anginc *= 2;
+					anginc = 16;
 				}
 				float theta = (360 / anginc) * t;//(360/((o == 0 || o == 5 || r == 2) ? 16 : 8)) * t;
-				if(anginc == 16)
-					System.out.println(anginc + " " + theta + " " + t);
-				cx = (int) ((50 * r) * Math.cos(theta));
-				cy = (int) ((50 * r) * Math.sin(theta));
+				//if(anginc == 16)
+					//System.out.println(anginc + " " + theta + " " + t);
+				cx = (int) (50 * (r * Math.cos((Math.PI/180)*theta)));
+				cy = (int) (50 * (r * Math.sin((Math.PI/180)*theta)));
+				/*if(anginc == 16) {
+					System.out.println(Math.cos(theta) + " " + Math.sin(theta));
+					System.out.println(theta + " " + t + "\n\t x: " + cx + " y: " + cy);
+				}*/
 				//System.out.println("cx: " + cx + " cy: " + cy + "\n\t o: " + or);
 				g2d.setColor(Color.red);
-				//g2d.fillOval(cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)), d, d);
-				g2d.drawString(/*"" + or + */"" + t,cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)));//, d, d);
+				g2d.fillOval(cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)), d, d);
+				//g2d.drawString(/*"" + or + */"" + t,cx + ((bimgTop.getWidth()/2) + (d/2)), cy + ((bimgTop.getHeight()/2) + (d/2)));//, d, d);
 				//top2D.fillRect(1, 1, bimgTop.getWidth(), bimgTop.getHeight());
 				//g2d.fillArc(0 + (bimgTop.getWidth()/2), 0 + (bimgTop.getHeight()/2), 50, 50, 0, 360);
 				//System.out.println(cx);
