@@ -52,14 +52,17 @@ public class CaveUtil {
 			byte t = 4;
 			//if we're the priority secondary origins
 			if(o == 1 || o == 3) {
-				byte o2 = 2;
 				//loop through their thetas if we are at the already done primary 5 origin
 				//skip over
-				for(byte t2 = 15; t2 >= 4; t2 -=(t2 <= 12 && t2 > 7) ? 5 : 1) {
+				int o2 = (o == 1 ? 4 : 2);
+				for(byte t2 = 15; t2 >= 4; t2--) {
 					dir.add(fromFullCoords((byte)(o+ROW_2), (byte)(o2+ROW_2), t, t2));
+					if(t2 == 12) {
+						t2-=4;
+						o2 = (o2 == 2 ? 4 : 2);
+					}
 					if(t == 7) {
 						t+=5;
-						o2++;
 					}
 					else
 						t++;
@@ -69,7 +72,7 @@ public class CaveUtil {
 		}
 	}
 	public static void testCoords() {
-		//System.out.println(dir.size());
+		System.out.println(dir.size());
 		for(int i : dir) {
 			System.out.println(String.format("ID: %9s,\tO: %9s,\tOrigin: %9s,\tRow: %9s,\tTheta: %9s,\tO2: %9s,\tOrigin2: %9s,\tRow2: %9s,\tTheta2: %9s",
 					i, getFull(i, 0), (int)(getFull(i, 0) % 10), (int)(getFull(i, 0) * .1), getFull(i, 2),
@@ -121,5 +124,11 @@ public class CaveUtil {
 		bb.putShort(0, dir);
 		return bb.get(place);
 	}
-	
+	public static int[] toIntArray(ArrayList<Integer> ari) {
+		int[] dest = new int[ari.size()];
+		for(int i = 0; i < ari.size(); i++) {
+			dest[i] = ari.get(i);
+		}
+		return dest;
+	}
 }

@@ -18,6 +18,9 @@ public class Node extends Location {
 	public Node(int numpaths) {
 		this(numpaths, genRanDirs(numpaths));
 	}
+	public Node(boolean full) {
+		this(CaveUtil.dirCount(), CaveUtil.toIntArray(CaveUtil.getDirections()));
+	}
 	public Node(int numpaths, int[] dirs) {
 		super();
 		addExits(numpaths, dirs);

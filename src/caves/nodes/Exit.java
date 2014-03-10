@@ -19,7 +19,7 @@ public class Exit extends Location {
 	}
 	public Exit(Node dest) {
 		this(allowableDir(dest), dest);
-	} 
+	}
 	public Exit(int dir, Node dest){
 		super();
 		this.dir = dir;
