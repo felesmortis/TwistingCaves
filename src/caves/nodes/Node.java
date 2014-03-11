@@ -16,7 +16,7 @@ public class Node extends Location {
 		this(4);
 	}
 	public Node(int numpaths) {
-		this(numpaths, genRanDirs(numpaths));
+		this(numpaths > CaveUtil.getDirections().size() ? CaveUtil.getDirections().size() : numpaths, genRanDirs(numpaths > CaveUtil.getDirections().size() ? CaveUtil.getDirections().size() : numpaths));
 	}
 	public Node(boolean full) {
 		this(CaveUtil.dirCount(), CaveUtil.toIntArray(CaveUtil.getDirections()));
@@ -41,21 +41,18 @@ public class Node extends Location {
 		return exits;
 	}
 	public static int[] genRanDirs(int num) {
+		ArrayList<Integer> temp = new ArrayList<Integer>(CaveUtil.getDirections());
 		int[] dirs = new int[num];
 		for(int i = 0; i < num; i++) {
-			boolean dupe = false;
-			do {
-				dupe = false;
+			int max = temp.size() - 1;
+			if(max >= 0) {
 				int ranDir;
-				ranDir = r.nextInt(CaveUtil.getDirections().size());
-				for(int in : dirs){
-					if(ranDir == in){
-						dupe = true;
-						break;
-					}
-				}
-				dirs[i] = CaveUtil.getDirections().get(ranDir);
-			} while(dupe);
+				ranDir = max > 0 ? r.nextInt(max) : 0;
+				dirs[i] = temp.get(ranDir);
+				temp.remove(ranDir);
+			}
+			else 
+				break;
 		}
 		return dirs;
 	}

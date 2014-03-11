@@ -69,7 +69,7 @@ public class Main extends JFrame implements Runnable {
 		getTestNode();
 	}
 	public void getTestNode() {
-		Node testnode = new Node(true);
+		Node testnode = new Node(2000);
 		setSelectedNode(testnode);
 	}
 	public void setSelectedNode(Node node) {
