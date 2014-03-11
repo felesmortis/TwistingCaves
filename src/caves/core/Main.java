@@ -99,7 +99,7 @@ public class Main extends JFrame implements Runnable {
 	}
 	public static void main(String[] args) {
 		CaveUtil.initDirections();
-		CaveUtil.testCoords();
+		//CaveUtil.testCoords();
 		Main main = new Main();
 
 	}
@@ -151,8 +151,8 @@ public class Main extends JFrame implements Runnable {
 				cx = (int) (50 * (r * Math.cos((Math.PI/180)*theta)));
 				cy = (int) (50 * (r * Math.sin((Math.PI/180)*theta)));
 				g2d.setColor(Color.red);
-				//g2d.fillOval(cx + ((bimg.getWidth()/2) + (d/2)), cy + ((bimg.getHeight()/2) + (d/2)), d, d);
-				g2d.drawString("" + t, cx + ((bimg.getWidth()/2) + (d/2)), cy + ((bimg.getHeight()/2) + (d/2)));
+				g2d.fillOval(cx + ((bimg.getWidth()/2) + (d/2)), cy + ((bimg.getHeight()/2) + (d/2)), d, d);
+				//g2d.drawString("" + t, cx + ((bimg.getWidth()/2) + (d/2)), cy + ((bimg.getHeight()/2) + (d/2)));
 			}
 		}
 	}
